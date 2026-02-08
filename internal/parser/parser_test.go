@@ -2,6 +2,7 @@ package parser
 
 import (
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -150,6 +151,132 @@ func TestParse_Blockquote(t *testing.T) {
 	}
 }
 
+func TestParse_HTMLBlock(t *testing.T) {
+	source := []byte("# Title\n\n<div class=\"note\">\n<p>Hello <strong>world</strong>.</p>\n</div>\n")
+
+	blocks, err := Parse(source)
+	if err != nil {
+		t.Fatalf("Parse failed: %v", err)
+	}
+
+	if len(blocks) != 2 {
+		t.Fatalf("expected 2 blocks, got %d", len(blocks))
+	}
+
+	if blocks[1].Kind != BlockHTML {
+		t.Errorf("expected HTML block, got %v", blocks[1].Kind)
+	}
+
+	if blocks[1].Text == "" {
+		t.Error("HTML block text should not be empty")
+	}
+
+	// Raw should preserve the original HTML
+	if blocks[1].Raw == "" {
+		t.Error("HTML block raw should not be empty")
+	}
+
+	// HTML output should contain the raw HTML content (not be stripped by goldmark)
+	if !strings.Contains(blocks[1].HTML, "<div") {
+		t.Errorf("HTML block HTML should contain the raw markup, got %q", blocks[1].HTML)
+	}
+}
+
+func TestParse_LinkInParagraph(t *testing.T) {
+	source := []byte("Visitez [Google](https://google.com) pour chercher.\n")
+
+	blocks, err := Parse(source)
+	if err != nil {
+		t.Fatalf("Parse failed: %v", err)
+	}
+	if len(blocks) != 1 {
+		t.Fatalf("expected 1 block, got %d", len(blocks))
+	}
+
+	b := blocks[0]
+	if b.Kind != BlockParagraph {
+		t.Errorf("expected Paragraph, got %v", b.Kind)
+	}
+
+	// Text should include the link display text
+	if !strings.Contains(b.Text, "Google") {
+		t.Errorf("Text should contain link display text 'Google', got %q", b.Text)
+	}
+
+	// Raw should preserve the markdown link syntax
+	if !strings.Contains(b.Raw, "[Google](https://google.com)") {
+		t.Errorf("Raw should preserve markdown link syntax, got %q", b.Raw)
+	}
+
+	// HTML should render an <a> tag
+	if !strings.Contains(b.HTML, `<a href="https://google.com">Google</a>`) {
+		t.Errorf("HTML should contain <a> tag, got %q", b.HTML)
+	}
+}
+
+func TestParse_EmphasisInParagraph(t *testing.T) {
+	source := []byte("Some **bold** and *italic* text.\n")
+
+	blocks, err := Parse(source)
+	if err != nil {
+		t.Fatalf("Parse failed: %v", err)
+	}
+	if len(blocks) != 1 {
+		t.Fatalf("expected 1 block, got %d", len(blocks))
+	}
+
+	b := blocks[0]
+
+	// Text should include text from inside emphasis
+	if !strings.Contains(b.Text, "bold") {
+		t.Errorf("Text should contain text inside emphasis, got %q", b.Text)
+	}
+	if !strings.Contains(b.Text, "italic") {
+		t.Errorf("Text should contain text inside emphasis, got %q", b.Text)
+	}
+
+	// HTML should have <strong> and <em> tags
+	if !strings.Contains(b.HTML, "<strong>bold</strong>") {
+		t.Errorf("HTML should contain <strong>, got %q", b.HTML)
+	}
+	if !strings.Contains(b.HTML, "<em>italic</em>") {
+		t.Errorf("HTML should contain <em>, got %q", b.HTML)
+	}
+}
+
+func TestParse_ListRoundTrip(t *testing.T) {
+	// Simulate the translation pipeline: translated list items with markers
+	// must parse back into a List block with proper <li> HTML.
+	tests := []struct {
+		name     string
+		markdown string
+	}{
+		{"unordered", "- pan fresco\n- queso de cabra\n- vino tinto\n"},
+		{"ordered", "1. pan fresco\n2. queso de cabra\n3. vino tinto\n"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			blocks, err := Parse([]byte(tt.markdown))
+			if err != nil {
+				t.Fatalf("Parse failed: %v", err)
+			}
+			if len(blocks) != 1 {
+				t.Fatalf("expected 1 block, got %d", len(blocks))
+			}
+			if blocks[0].Kind != BlockList {
+				t.Errorf("expected List, got %v", blocks[0].Kind)
+			}
+			if !strings.Contains(blocks[0].HTML, "<li>pan fresco</li>") {
+				t.Errorf("list HTML should contain <li> items, got %q", blocks[0].HTML)
+			}
+			if !strings.Contains(blocks[0].HTML, "<li>vino tinto</li>") {
+				t.Errorf("list HTML should contain <li> items, got %q", blocks[0].HTML)
+			}
+		})
+	}
+}
+
 func TestParse_SampleFile(t *testing.T) {
 	source, err := os.ReadFile("../../testdata/sample.fr.md")
 	if err != nil {
@@ -161,10 +288,10 @@ func TestParse_SampleFile(t *testing.T) {
 		t.Fatalf("Parse failed: %v", err)
 	}
 
-	// sample.fr.md has: h1, p, h2, p, p, h3, list, h2, codeblock, blockquote, thematic break, p
-	// = 12 blocks
-	if len(blocks) < 10 {
-		t.Errorf("expected at least 10 blocks from sample, got %d", len(blocks))
+	// sample.fr.md has: h1, p, h2, p, p, h3, list, h2, codeblock, blockquote, h2, html, thematic break, p
+	// = 14 blocks
+	if len(blocks) < 12 {
+		t.Errorf("expected at least 12 blocks from sample, got %d", len(blocks))
 	}
 
 	// First block should be a heading

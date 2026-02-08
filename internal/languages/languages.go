@@ -58,6 +58,51 @@ var supported = map[string]string{
 	"zh": "Chinese",
 }
 
+// nativeNames maps language codes to their names in the native language.
+var nativeNames = map[string]string{
+	"af": "Afrikaans",
+	"ar": "العربية",
+	"bg": "Български",
+	"bn": "বাংলা",
+	"ca": "Català",
+	"cs": "Čeština",
+	"da": "Dansk",
+	"de": "Deutsch",
+	"el": "Ελληνικά",
+	"en": "English",
+	"es": "Español",
+	"et": "Eesti",
+	"fa": "فارسی",
+	"fi": "Suomi",
+	"fr": "Français",
+	"he": "עברית",
+	"hi": "हिन्दी",
+	"hr": "Hrvatski",
+	"hu": "Magyar",
+	"id": "Bahasa Indonesia",
+	"it": "Italiano",
+	"ja": "日本語",
+	"ko": "한국어",
+	"lt": "Lietuvių",
+	"lv": "Latviešu",
+	"ms": "Bahasa Melayu",
+	"nl": "Nederlands",
+	"no": "Norsk",
+	"pl": "Polski",
+	"pt": "Português",
+	"ro": "Română",
+	"ru": "Русский",
+	"sk": "Slovenčina",
+	"sl": "Slovenščina",
+	"sr": "Српски",
+	"sv": "Svenska",
+	"th": "ไทย",
+	"tr": "Türkçe",
+	"uk": "Українська",
+	"vi": "Tiếng Việt",
+	"zh": "中文",
+}
+
 // Validate checks if a language code is in the supported list.
 func Validate(code string) error {
 	if _, ok := supported[code]; !ok {
@@ -84,6 +129,14 @@ func Name(code string) string {
 		return name
 	}
 	return code
+}
+
+// NativeName returns the language name in its own language, or falls back to the English name.
+func NativeName(code string) string {
+	if name, ok := nativeNames[code]; ok {
+		return name
+	}
+	return Name(code)
 }
 
 // PrintSupported writes the supported languages table to the given writer.

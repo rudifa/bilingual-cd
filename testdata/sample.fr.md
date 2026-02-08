@@ -24,6 +24,16 @@ def bonjour(nom):
 
 > La vie est belle quand on la partage avec les autres.
 
+## Exemple HTML
+
+<div class="note">
+<p>Ceci est un paragraphe en <strong>HTML brut</strong>.</p>
+</div>
+
+## Exemple URL lien
+
+Pour en savoir plus, visitez [Wikipedia](https://fr.wikipedia.org/wiki/France) pour des informations détaillées.
+
 ---
 
 Merci d'avoir lu ce document.

@@ -5,6 +5,8 @@ import (
 	"os"
 	"strings"
 	"testing"
+
+	"bilingual_pdf/internal/parser"
 )
 
 func TestFileTranslator_MatchingBlocks(t *testing.T) {
@@ -68,6 +70,53 @@ func TestFileTranslator_MismatchedBlocks(t *testing.T) {
 	}
 	if !emptyFound {
 		t.Error("expected some empty (padded) results for mismatched blocks")
+	}
+}
+
+func TestFileTranslator_HTMLBlock(t *testing.T) {
+	ft := NewFileTranslator("../../testdata/sample.es.md", os.Stderr)
+
+	// Source blocks matching sample.fr.md structure including the HTML block
+	source, err := os.ReadFile("../../testdata/sample.fr.md")
+	if err != nil {
+		t.Fatalf("reading source: %v", err)
+	}
+
+	sourceBlocks, err := parser.Parse(source)
+	if err != nil {
+		t.Fatalf("parsing source: %v", err)
+	}
+
+	transBlocks, err := ft.TranslateBlocks(sourceBlocks)
+	if err != nil {
+		t.Fatalf("TranslateBlocks failed: %v", err)
+	}
+
+	// Find the HTML block in both source and translated blocks
+	var srcHTML, tgtHTML *parser.Block
+	for i := range sourceBlocks {
+		if sourceBlocks[i].Kind == parser.BlockHTML {
+			srcHTML = &sourceBlocks[i]
+			break
+		}
+	}
+	for i := range transBlocks {
+		if transBlocks[i].Kind == parser.BlockHTML {
+			tgtHTML = &transBlocks[i]
+			break
+		}
+	}
+
+	if srcHTML == nil {
+		t.Fatal("expected an HTML block in source")
+	}
+	if tgtHTML == nil {
+		t.Fatal("expected an HTML block in translation")
+	}
+
+	// Source and target HTML blocks should differ (different languages)
+	if srcHTML.Text == tgtHTML.Text {
+		t.Error("source and translated HTML blocks should have different content")
 	}
 }
 
