@@ -5,6 +5,8 @@ import (
 	"html/template"
 	"os"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 
 	"bilingual_pdf/internal/converter"
 	"bilingual_pdf/internal/languages"
@@ -86,8 +88,8 @@ func runPipeline(cmd *cobra.Command, args []string) error {
 	pairs := buildPairs(blocks, translatedBlocks)
 	htmlContent, err := renderer.Render(renderer.TemplateData{
 		Title:       fmt.Sprintf("Bilingual: %s → %s", languages.Name(sourceLang), languages.Name(targetLang)),
-		SourceLabel: languages.Name(sourceLang),
-		TargetLabel: languages.Name(targetLang),
+		SourceLabel: languages.NativeName(sourceLang),
+		TargetLabel: languages.NativeName(targetLang),
 		Pairs:       pairs,
 	})
 	if err != nil {
@@ -168,7 +170,16 @@ func translateWithGoogle(blocks []parser.Block) ([]parser.Block, error) {
 
 	texts := make([]string, len(blocks))
 	for i, b := range blocks {
-		if b.Kind != parser.BlockCodeBlock {
+		switch b.Kind {
+		case parser.BlockCodeBlock:
+			// code blocks are never translated
+		case parser.BlockHTML:
+			// send raw HTML to Google Translate (it preserves tags)
+			texts[i] = b.Raw
+		case parser.BlockParagraph:
+			// send raw markdown so inline syntax ([links](url), **bold**) is preserved
+			texts[i] = b.Raw
+		default:
 			texts[i] = b.Text
 		}
 	}
@@ -186,6 +197,19 @@ func buildTranslatedBlocks(blocks []parser.Block, translatedTexts []string) []pa
 	for i, b := range blocks {
 		if b.Kind == parser.BlockCodeBlock {
 			result[i] = b
+			continue
+		}
+		if b.Kind == parser.BlockHTML {
+			translated := translatedTexts[i]
+			if translated == "" {
+				translated = b.HTML
+			}
+			result[i] = parser.Block{
+				Kind: parser.BlockHTML,
+				Text: translated,
+				Raw:  translated,
+				HTML: translated,
+			}
 			continue
 		}
 		md := reconstructMarkdown(b, translatedTexts[i])
@@ -210,14 +234,15 @@ func maybeSaveTranslation(inputFile string, blocks, translatedBlocks []parser.Bl
 	transPath := naming.TranslationOutputName(inputFile, sourceLang, targetLang)
 	var mdBuf strings.Builder
 	for i, b := range translatedBlocks {
-		if i < len(blocks) {
-			mdBuf.WriteString(reconstructMarkdown(blocks[i], b.Text))
-		} else {
-			mdBuf.WriteString(b.Text)
+		// Use translated block's .Raw to preserve inline markdown (links, bold, etc.)
+		raw := strings.TrimRight(b.Raw, "\n")
+		if raw == "" && i < len(blocks) {
+			raw = reconstructMarkdown(blocks[i], b.Text)
 		}
-		mdBuf.WriteString("\n")
+		mdBuf.WriteString(raw)
+		mdBuf.WriteString("\n\n")
 	}
-	if err := os.WriteFile(transPath, []byte(mdBuf.String()), 0644); err != nil {
+	if err := os.WriteFile(transPath, []byte(strings.TrimRight(mdBuf.String(), "\n")+"\n"), 0644); err != nil {
 		return fmt.Errorf("saving translation: %w", err)
 	}
 	fmt.Fprintf(os.Stderr, "Saved translation: %s\n", transPath)
@@ -273,7 +298,11 @@ func reconstructMarkdown(sourceBlock parser.Block, translatedText string) string
 	switch sourceBlock.Kind {
 	case parser.BlockHeading:
 		prefix := strings.Repeat("#", sourceBlock.Level) + " "
-		return prefix + strings.TrimSpace(translatedText)
+		text := strings.TrimSpace(translatedText)
+		if r, size := utf8.DecodeRuneInString(text); size > 0 {
+			text = string(unicode.ToUpper(r)) + text[size:]
+		}
+		return prefix + text
 	case parser.BlockBlockquote:
 		lines := strings.Split(translatedText, "\n")
 		var buf strings.Builder
@@ -285,10 +314,26 @@ func reconstructMarkdown(sourceBlock parser.Block, translatedText string) string
 		return buf.String()
 	case parser.BlockCodeBlock:
 		return sourceBlock.Raw
+	case parser.BlockHTML:
+		return translatedText
 	case parser.BlockThematicBreak:
 		return "---"
 	case parser.BlockList:
-		return translatedText
+		items := strings.Split(strings.TrimRight(translatedText, "\n"), "\n")
+		isOrdered := len(sourceBlock.Raw) > 0 && sourceBlock.Raw[0] >= '1' && sourceBlock.Raw[0] <= '9'
+		var buf strings.Builder
+		for i, item := range items {
+			item = strings.TrimSpace(item)
+			if item == "" {
+				continue
+			}
+			if isOrdered {
+				buf.WriteString(fmt.Sprintf("%d. %s\n", i+1, item))
+			} else {
+				buf.WriteString("- " + item + "\n")
+			}
+		}
+		return buf.String()
 	default:
 		return translatedText
 	}

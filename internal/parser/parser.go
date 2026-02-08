@@ -67,12 +67,17 @@ func Parse(source []byte) ([]Block, error) {
 			continue
 		}
 
-		// Render HTML from the reconstructed markdown
-		var buf bytes.Buffer
-		if err := md.Convert([]byte(block.Raw), &buf); err != nil {
-			return nil, err
+		// Render HTML: for HTML blocks the raw content is already HTML;
+		// for everything else, convert the reconstructed markdown.
+		if block.Kind == BlockHTML {
+			block.HTML = block.Raw
+		} else {
+			var buf bytes.Buffer
+			if err := md.Convert([]byte(block.Raw), &buf); err != nil {
+				return nil, err
+			}
+			block.HTML = buf.String()
 		}
-		block.HTML = buf.String()
 
 		blocks = append(blocks, *block)
 	}
@@ -94,7 +99,7 @@ func extractBlock(node ast.Node, source []byte) *Block {
 	case *ast.Paragraph:
 		b.Kind = BlockParagraph
 		b.Text = collectText(node, source)
-		b.Raw = b.Text
+		b.Raw = strings.TrimRight(extractLines(node, source), "\n")
 
 	case *ast.List:
 		b.Kind = BlockList
@@ -176,6 +181,12 @@ func collectInlineNode(buf *bytes.Buffer, node ast.Node, source []byte) {
 				buf.Write(t.Segment.Value(source))
 			}
 		}
+		return
+	}
+	// For other inline nodes (Link, Emphasis, Image, etc.),
+	// recurse into their children to collect text content.
+	for child := node.FirstChild(); child != nil; child = child.NextSibling() {
+		collectInlineNode(buf, child, source)
 	}
 }
 

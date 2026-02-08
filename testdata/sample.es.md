@@ -1,28 +1,38 @@
-# Hola mundo
+# Hola Mundo
 
-Este es un documento de prueba en español. Contiene varios párrafos y diferentes tipos de bloques markdown.
+Este es un documento de prueba en francés. Contiene varios párrafos y diferentes tipos de bloques de rebajas.
 
 ## Las estaciones
 
 La primavera es la estación de la renovación. Las flores florecen y los pájaros cantan.
 
-El verano trae el calor y los largos días soleados.
+El verano trae calor y largos días soleados.
 
 ### Lista de compras
 
-- Pan fresco
-- Queso de cabra
-- Vino tinto
-- Frutas de temporada
+- pan fresco
+- queso de cabra
+- vino tinto
+- frutas de temporada
 
-## Ejemplo de código
+## Código de ejemplo
 
 ```python
 def bonjour(nom):
     print(f"Bonjour, {nom}!")
 ```
 
-> La vida es bella cuando se comparte con los demás.
+> La vida es hermosa cuando la compartimos con los demás.
+
+## Ejemplo HTML
+
+<div clase="nota">
+<p>Este es un párrafo en <strong>HTML simple</strong>.</p>
+</div>
+
+## Enlace URL de ejemplo
+
+Para obtener más información, visite [Wikipedia](https://fr.wikipedia.org/wiki/France) para obtener información detallada.
 
 ---
 
