@@ -17,7 +17,7 @@ bilingual_pdf my_doc.md --source en --target de
 
 ## Installation
 
-1. download the zip file appropriate for your platform from the [Releases](https://github.com/rudifa/bilingual-cd/releases/tag/v1.0.0) page
+1. download the zip file appropriate for your platform from the [Releases](https://github.com/rudifa/bilingual-cd/releases/latest) page
 2. unzip and move the `bilingual_pdf` executable into a directory which is on your system PATH
 3. if needed, handle the security settings for the executable `bilingual_pdf`
    - on a Mac, you may need to run
