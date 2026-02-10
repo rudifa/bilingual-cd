@@ -38,7 +38,7 @@ func (g *GoogleTranslator) Translate(blocks []string, source, target string) ([]
 		}
 
 		if g.Progress != nil {
-			fmt.Fprintf(g.Progress, "Translating block %d/%d...\r", i+1, len(blocks))
+			_, _ = fmt.Fprintf(g.Progress, "Translating block %d/%d...\r", i+1, len(blocks))
 		}
 
 		result, err := t.Translate(block, source, target)
@@ -54,7 +54,7 @@ func (g *GoogleTranslator) Translate(blocks []string, source, target string) ([]
 	}
 
 	if g.Progress != nil {
-		fmt.Fprintf(g.Progress, "Translated %d blocks.          \n", len(blocks))
+		_, _ = fmt.Fprintf(g.Progress, "Translated %d blocks.          \n", len(blocks))
 	}
 
 	return results, nil
