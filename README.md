@@ -17,7 +17,14 @@ bilingual_pdf my_doc.md --source en --target de
 
 ## Installation
 
-...
+1. download the zip file appropriate for your platform from the [Releases](https://github.com/rudifa/bilingual-cd/releases/latest) page
+2. unzip and move the `bilingual_pdf` executable into a directory which is on your system PATH
+3. if needed, handle the security settings for the executable `bilingual_pdf`
+   - on a Mac, you may need to run
+
+     ```bash
+     xattr -d com.apple.quarantine /path/to/bilingual_pdf
+     ```
 
 ## Usage
 
@@ -48,7 +55,7 @@ bilingual_pdf --list-languages
 
 ```
 
-**Default output filename:** `<stem>.<source>.<target>.pdf` (or `.html` with `--html-only`). If the input already ends with `.<source>.md`, the source suffix is not repeated (e.g. `doc.fr.md` → `doc.fr.es.pdf`, not `doc.fr.fr.es.pdf`).
+**Default output filename:** `<stem>.<source>.<target>.pdf` (or `.html` with `--html`). If the input already ends with `.<source>.md`, the source suffix is not repeated (e.g. `doc.fr.md` → `doc.fr.es.pdf`, not `doc.fr.fr.es.pdf`).
 
 ## Input format
 
@@ -85,3 +92,24 @@ The app warns if the block counts don't match and pads the shorter side with emp
 2. **Translate** each block to the target language (automatically via Google Translate, or using a pre-translated file you supply)
 3. **Render** a 2-column HTML table where each row pairs a source block with its translated counterpart
 4. **Convert** the HTML to an A4 PDF
+
+## For developers only
+
+Use the go build, test and deployment commands or use the `Makefile` targets.
+
+Use the resulting `bilingual_pdf` CLI tool to run the app on the sample markdown files in `testdata/`. The generated PDFs and intermediate HTML files are saved in the same directory. You can inspect these to understand how the app works and to debug any issues.
+
+Run `.scripts/smoketest.sh` to verify that the app runs successfully with valid arguments and that it fails with invalid arguments.
+
+
+```bash
+
+./.scripts/smoketest.sh # quick tests without network access
+
+./.scripts/smoketest.sh --full # all tests, including those that use the translation API
+
+./.scripts/smoketest.sh --full --keep # keep generated files for inspection after the test run
+
+./.scripts/smoketest.sh --clean # remove generated files
+
+```

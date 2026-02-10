@@ -112,19 +112,22 @@ func validateArgs(args []string) (string, error) {
 	}
 	inputFile := args[0]
 
-	if ext := filepath.Ext(inputFile); ext != ".md" {
+	if ext := filepath.Ext(inputFile); strings.ToLower(ext) != ".md" {
 		return "", fmt.Errorf("input file must have .md extension, got %q", ext)
 	}
 	if _, err := os.Stat(inputFile); os.IsNotExist(err) {
 		return "", fmt.Errorf("input file not found: %s", inputFile)
 	}
 	if translationFile != "" {
-		if ext := filepath.Ext(translationFile); ext != ".md" {
+		if ext := filepath.Ext(translationFile); strings.ToLower(ext) != ".md" {
 			return "", fmt.Errorf("--translation file must have .md extension, got %q", ext)
+		}
+		if _, err := os.Stat(translationFile); os.IsNotExist(err) {
+			return "", fmt.Errorf("translation file not found: %s", translationFile)
 		}
 	}
 	if outputFile != "" {
-		if ext := filepath.Ext(outputFile); ext != ".pdf" {
+		if ext := filepath.Ext(outputFile); strings.ToLower(ext) != ".pdf" {
 			return "", fmt.Errorf("--output file must have .pdf extension, got %q", ext)
 		}
 	}

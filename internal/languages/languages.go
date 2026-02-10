@@ -142,10 +142,10 @@ func NativeName(code string) string {
 // PrintSupported writes the supported languages table to the given writer.
 func PrintSupported(w io.Writer) {
 	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(tw, "Code\tLanguage")
-	fmt.Fprintln(tw, "----\t--------")
+	_, _ = fmt.Fprintln(tw, "Code\tLanguage")
+	_, _ = fmt.Fprintln(tw, "----\t--------")
 	for _, lang := range Supported() {
-		fmt.Fprintf(tw, "%s\t%s\n", lang.Code, lang.Name)
+		_, _ = fmt.Fprintf(tw, "%s\t%s\n", lang.Code, lang.Name)
 	}
-	tw.Flush()
+	_ = tw.Flush()
 }

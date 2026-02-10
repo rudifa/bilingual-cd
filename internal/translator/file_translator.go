@@ -37,7 +37,7 @@ func (f *FileTranslator) Translate(blocks []string, source, target string) ([]st
 	tgtCount := len(transBlocks)
 
 	if srcCount != tgtCount {
-		fmt.Fprintf(f.Warn, "Warning: block count mismatch — source has %d blocks, translation has %d blocks\n", srcCount, tgtCount)
+		_, _ = fmt.Fprintf(f.Warn, "Warning: block count mismatch — source has %d blocks, translation has %d blocks\n", srcCount, tgtCount)
 	}
 
 	// Build result, padding shorter side with empty strings
@@ -73,7 +73,7 @@ func (f *FileTranslator) TranslateBlocks(sourceBlocks []parser.Block) ([]parser.
 	tgtCount := len(transBlocks)
 
 	if srcCount != tgtCount {
-		fmt.Fprintf(f.Warn, "Warning: block count mismatch — source has %d blocks, translation has %d blocks\n", srcCount, tgtCount)
+		_, _ = fmt.Fprintf(f.Warn, "Warning: block count mismatch — source has %d blocks, translation has %d blocks\n", srcCount, tgtCount)
 	}
 
 	// Pad to the longer length

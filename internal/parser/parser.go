@@ -110,7 +110,7 @@ func extractBlock(node ast.Node, source []byte) *Block {
 		b.Text = extractCodeContent(n, source)
 		lang := ""
 		if n.Info != nil {
-			lang = string(n.Info.Text(source))
+			lang = string(n.Info.Value(source))
 		}
 		b.Raw = "```" + lang + "\n" + b.Text + "```"
 
