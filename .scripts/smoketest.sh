@@ -96,6 +96,9 @@ run_expect_ok "--help" --help
 run_expect_ok "--list-languages" --list-languages
 run_expect_ok "with --translation file (no network)" \
     testdata/sample.fr.md --translation testdata/sample.es.md
+run_expect_ok "small fr->es" testdata/sample.fr.md --translation testdata/sample.es.md --font-size small --output testdata/sample.fr.es.s.pdf
+run_expect_ok "medium fr->es" testdata/sample.fr.md --translation testdata/sample.es.md --font-size medium --output testdata/sample.fr.es.m.pdf
+run_expect_ok "large fr->es" testdata/sample.fr.md --translation testdata/sample.es.md --font-size large --output testdata/sample.fr.es.l.pdf
 
 echo ""
 echo "--- Should fail ---"
@@ -106,6 +109,7 @@ run_expect_fail "invalid target lang" testdata/sample.fr.md --target zz
 run_expect_fail "non-.md file" README.txt
 run_expect_fail "nonexistent translation" testdata/sample.fr.md --translation missing.md
 run_expect_fail "output not .pdf" testdata/sample.fr.md -o out.txt
+run_expect_fail "invalid --font-size" testdata/sample.fr.md --font-size huge
 
 if $FULL; then
     echo ""

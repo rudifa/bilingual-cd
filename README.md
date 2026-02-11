@@ -41,6 +41,9 @@ bilingual_pdf document.md --translation document_es.md
 # Specify output filename
 bilingual_pdf document.md -o bilingual.pdf
 
+# Choose font size (small, medium, or large; default: medium)
+bilingual_pdf document.md --font-size small
+
 # Also save the intermediate HTML (useful for debugging)
 bilingual_pdf document.md --html
 
