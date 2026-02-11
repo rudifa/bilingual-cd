@@ -15,7 +15,7 @@ const htmlTemplate = `<!DOCTYPE html>
     }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 11pt;
+      font-size: {{.Fonts.Body}}pt;
       line-height: 1.4;
       margin: 0;
       padding: 15mm;
@@ -32,7 +32,7 @@ const htmlTemplate = `<!DOCTYPE html>
       text-align: center;
       padding: 8px 12px;
       border-bottom: 2px solid #ccc;
-      font-size: 12pt;
+      font-size: {{.Fonts.Head}}pt;
     }
     tbody tr {
       page-break-inside: avoid;
@@ -63,14 +63,14 @@ const htmlTemplate = `<!DOCTYPE html>
       background: #f8f8f8;
       padding: 1px 4px;
       border-radius: 3px;
-      font-size: 10pt;
+      font-size: {{.Fonts.Code}}pt;
     }
     pre {
       background: #f8f8f8;
       padding: 8px;
       border-radius: 4px;
       overflow-x: auto;
-      font-size: 9pt;
+      font-size: {{.Fonts.Pre}}pt;
     }
     pre code {
       background: none;

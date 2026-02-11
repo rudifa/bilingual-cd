@@ -230,3 +230,101 @@ func TestRender_HTMLEscaping(t *testing.T) {
 		t.Error("template.HTML content should not be escaped")
 	}
 }
+
+func TestRender_FontSizePresets(t *testing.T) {
+	basePairs := []BlockPair{
+		{
+			Source: template.HTML("<p>Hello</p>"),
+			Target: template.HTML("<p>Bonjour</p>"),
+		},
+	}
+
+	tests := []struct {
+		name  string
+		fonts FontSizes
+		body  string
+		head  string
+		code  string
+		pre   string
+	}{
+		{"small", FontSizePresets["small"], "font-size: 9pt", "font-size: 10pt", "font-size: 8pt", "font-size: 7pt"},
+		{"medium", FontSizePresets["medium"], "font-size: 10pt", "font-size: 11pt", "font-size: 9pt", "font-size: 8pt"},
+		{"large", FontSizePresets["large"], "font-size: 11pt", "font-size: 12pt", "font-size: 10pt", "font-size: 9pt"},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			data := TemplateData{
+				Title:       "Font Size Test",
+				SourceLabel: "EN",
+				TargetLabel: "FR",
+				Pairs:       basePairs,
+				Fonts:       tc.fonts,
+			}
+
+			html, err := Render(data)
+			if err != nil {
+				t.Fatalf("Render failed: %v", err)
+			}
+
+			// Each font-size declaration should appear in the CSS
+			for _, expected := range []string{tc.body, tc.head, tc.code, tc.pre} {
+				if !strings.Contains(html, expected) {
+					t.Errorf("rendered HTML should contain %q for %s preset", expected, tc.name)
+				}
+			}
+		})
+	}
+}
+
+func TestRender_DefaultFontSize(t *testing.T) {
+	// When Fonts is zero-value, Render should apply the default (medium) preset
+	data := TemplateData{
+		Title:       "Default Font Size",
+		SourceLabel: "EN",
+		TargetLabel: "FR",
+		Pairs: []BlockPair{
+			{
+				Source: template.HTML("<p>Hello</p>"),
+				Target: template.HTML("<p>Bonjour</p>"),
+			},
+		},
+		// Fonts intentionally omitted (zero value)
+	}
+
+	html, err := Render(data)
+	if err != nil {
+		t.Fatalf("Render failed: %v", err)
+	}
+
+	// Should use medium sizes: body=10, head=11, code=9, pre=8
+	for _, expected := range []string{"font-size: 10pt", "font-size: 11pt", "font-size: 9pt", "font-size: 8pt"} {
+		if !strings.Contains(html, expected) {
+			t.Errorf("default render should contain %q (medium preset)", expected)
+		}
+	}
+}
+
+func TestFontSizePresets_Values(t *testing.T) {
+	// Verify the preset map contains exactly the expected keys and values
+	expected := map[string]FontSizes{
+		"small":  {Body: 9, Head: 10, Code: 8, Pre: 7},
+		"medium": {Body: 10, Head: 11, Code: 9, Pre: 8},
+		"large":  {Body: 11, Head: 12, Code: 10, Pre: 9},
+	}
+
+	if len(FontSizePresets) != len(expected) {
+		t.Fatalf("expected %d presets, got %d", len(expected), len(FontSizePresets))
+	}
+
+	for name, want := range expected {
+		got, ok := FontSizePresets[name]
+		if !ok {
+			t.Errorf("missing preset %q", name)
+			continue
+		}
+		if got != want {
+			t.Errorf("preset %q = %+v, want %+v", name, got, want)
+		}
+	}
+}

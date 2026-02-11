@@ -24,6 +24,7 @@ var (
 	targetLang      string
 	translationFile string
 	outputFile      string
+	fontSize        string
 	saveHTML        bool
 	saveTranslation bool
 	listLanguages   bool
@@ -45,6 +46,7 @@ func init() {
 	rootCmd.Flags().StringVarP(&targetLang, "target", "t", "es", "target language code")
 	rootCmd.Flags().StringVar(&translationFile, "translation", "", "path to pre-translated markdown file")
 	rootCmd.Flags().StringVarP(&outputFile, "output", "o", "", "output PDF filename")
+	rootCmd.Flags().StringVar(&fontSize, "font-size", renderer.DefaultFontSize, "font size preset: small, medium, or large")
 	rootCmd.Flags().BoolVar(&saveHTML, "html", false, "also save the generated HTML")
 	rootCmd.Flags().BoolVar(&saveTranslation, "save-translation", false, "also save the translation markdown")
 	rootCmd.Flags().BoolVar(&listLanguages, "list-languages", false, "list supported language codes")
@@ -92,6 +94,7 @@ func runPipeline(cmd *cobra.Command, args []string) error {
 		SourceLabel: languages.NativeName(sourceLang),
 		TargetLabel: languages.NativeName(targetLang),
 		Pairs:       pairs,
+		Fonts:       renderer.FontSizePresets[fontSize],
 	})
 	if err != nil {
 		return fmt.Errorf("rendering HTML: %w", err)
@@ -130,6 +133,9 @@ func validateArgs(args []string) (string, error) {
 		if ext := filepath.Ext(outputFile); strings.ToLower(ext) != ".pdf" {
 			return "", fmt.Errorf("--output file must have .pdf extension, got %q", ext)
 		}
+	}
+	if _, ok := renderer.FontSizePresets[fontSize]; !ok {
+		return "", fmt.Errorf("invalid --font-size %q: must be small, medium, or large", fontSize)
 	}
 	if err := languages.Validate(sourceLang); err != nil {
 		return "", fmt.Errorf("invalid source language: %w", err)
