@@ -26,6 +26,9 @@ const htmlTemplate = `<!DOCTYPE html>
       border-collapse: collapse;
       table-layout: fixed;
     }
+    thead {
+      display: table-row-group;
+    }
     thead td {
       background: #f0f0f0;
       font-weight: bold;
