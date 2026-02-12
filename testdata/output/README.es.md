@@ -20,8 +20,8 @@ bilingual_pdf my_doc.md \
 ## Instalación
 
 1. descargue el archivo zip apropiado para su plataforma desde la página [Versiones](https://github.com/rudifa/bilingual_pdf/releases/latest)
-2. descomprima y mueva el ejecutable `bililingual_pdf` a un directorio que esté en la RUTA de su sistema
-3. si es necesario, maneje la configuración de seguridad para el ejecutable `bilingüe_pdf`
+2. descomprima y mueva el ejecutable `bilingual_pdf` a un directorio que esté en la RUTA de su sistema
+3. si es necesario, maneje la configuración de seguridad para el ejecutable `bilingual_pdf`
 
 En una computadora Mac, puedes permitir la ejecución de la aplicación eliminando el atributo de cuarentena:
 
