@@ -1,6 +1,6 @@
 # Generador de PDF bilingüe de 2 columnas
 
-Convierte un documento con rebajas en un PDF bilingüe uno al lado del otro con el idioma de origen en la columna de la izquierda y su traducción en la columna de la derecha. Admite cualquier par de idiomas disponible a través de Google Translate. El valor predeterminado es francés → español. Los párrafos correspondientes están alineados verticalmente.
+Convierte un documento Markdown en un PDF bilingüe uno al lado del otro con el idioma de origen en la columna de la izquierda y su traducción en la columna de la derecha. Admite cualquier par de idiomas disponible a través de Google Translate. El valor predeterminado es francés → español. Los párrafos correspondientes están alineados verticalmente.
 
 ## Inicio rápido
 
@@ -77,7 +77,7 @@ bilingual_pdf --list-languages
 
 ## Formato de entrada
 
-La rebaja de entrada debe contener texto simple, opcionalmente formateado con encabezados, párrafos, listas, bloques de código, citas en bloque, reglas horizontales y enlaces web. Por ejemplo:
+El Markdown de entrada debe contener texto simple, opcionalmente formateado con encabezados, párrafos, listas, bloques de código, citas en bloque, reglas horizontales y enlaces web. Por ejemplo:
 
 ```markdown
 # Main Title
@@ -94,7 +94,7 @@ A web link:
 [OpenAI](https://www.openai.com)
 ```
 
-La aplicación no admite funciones de rebajas más complejas, en particular tablas e imágenes.
+La aplicación no admite funciones de Markdown más complejas, en particular tablas e imágenes.
 
 ## Usando un archivo pretraducido
 
@@ -111,7 +111,7 @@ La aplicación advierte si el recuento de bloques no coincide y rellena el lado 
 
 ### Como funciona
 
-1. **Analizar** la rebaja de entrada en bloques estructurales (títulos y párrafos)
+1. **Analizar** el Markdown de entrada en bloques estructurales (títulos y párrafos)
 2. **Traduce** cada bloque al idioma de destino (automáticamente a través del Traductor de Google o utilizando un archivo pretraducido que usted proporcione)
 3. **Renderizar** una tabla HTML de 2 columnas donde cada fila empareja un bloque fuente con su contraparte traducida.
 4. **Convierta** el HTML a un PDF A4
@@ -120,7 +120,7 @@ La aplicación advierte si el recuento de bloques no coincide y rellena el lado 
 
 Utilice los comandos go build, test and install o utilice los objetivos `Makefile`.
 
-Utilice la herramienta CLI `bililingual_pdf` resultante para ejecutar la aplicación en los archivos de rebajas de muestra en `testdata/`. Los archivos PDF generados y los archivos HTML intermedios se guardan en el mismo directorio. Puede inspeccionarlos para comprender cómo funciona la aplicación y solucionar cualquier problema.
+Utilice la herramienta CLI `bililingual_pdf` resultante para ejecutar la aplicación en los archivos Markdown de muestra en `testdata/`. Los archivos PDF generados y los archivos HTML intermedios se guardan en el mismo directorio. Puede inspeccionarlos para comprender cómo funciona la aplicación y solucionar cualquier problema.
 
 Ejecute `.scripts/smoketest.sh` para verificar que la aplicación se ejecute correctamente con argumentos válidos y que falle con argumentos no válidos.
 

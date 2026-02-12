@@ -1,6 +1,6 @@
 # Bilingual 2-Column PDF Generator
 
-Converts a markdown document into a side-by-side bilingual PDF with the source language in the left column and its translation in the right column. Supports any language pair available through Google Translate. Defaults to French→Spanish. Corresponding paragraphs are vertically aligned.
+Converts a Markdown document into a side-by-side bilingual PDF with the source language in the left column and its translation in the right column. Supports any language pair available through Google Translate. Defaults to French→Spanish. Corresponding paragraphs are vertically aligned.
 
 ## Quick start
 
@@ -77,7 +77,7 @@ bilingual_pdf --list-languages
 
 ## Input format
 
-The input markdown should contain simple text, optionally formatted with headings, paragraphs, lists, code blocks, blockquotes, horizontal rules and web links. For example:
+The input Markdown should contain simple text, optionally formatted with headings, paragraphs, lists, code blocks, blockquotes, horizontal rules and web links. For example:
 
 ```markdown
 # Main Title
@@ -94,11 +94,11 @@ A web link:
 [OpenAI](https://www.openai.com)
 ```
 
-The app does not support more complex markdown features, notably tables and images.
+The app does not support more complex Markdown features, notably tables and images.
 
 ## Using a pre-translated file
 
-If you prefer hand-edited translations over machine translation, provide a pre-translated markdown file with the **same structure** (same number and order of headings and paragraphs) as the source:
+If you prefer hand-edited translations over machine translation, provide a pre-translated Markdown file with the **same structure** (same number and order of headings and paragraphs) as the source:
 
 ```bash
 bilingual_pdf source_fr.md \
@@ -111,7 +111,7 @@ The app warns if the block counts don't match and pads the shorter side with emp
 
 ### How it works
 
-1. **Parse** the input markdown into structural blocks (headings and paragraphs)
+1. **Parse** the input Markdown into structural blocks (headings and paragraphs)
 2. **Translate** each block to the target language (automatically via Google Translate, or using a pre-translated file you supply)
 3. **Render** a 2-column HTML table where each row pairs a source block with its translated counterpart
 4. **Convert** the HTML to an A4 PDF
@@ -120,7 +120,7 @@ The app warns if the block counts don't match and pads the shorter side with emp
 
 Use the go build, test and install commands or use the `Makefile` targets.
 
-Use the resulting `bilingual_pdf` CLI tool to run the app on the sample markdown files in `testdata/`. The generated PDFs and intermediate HTML files are saved in the same directory. You can inspect these to understand how the app works and to debug any issues.
+Use the resulting `bilingual_pdf` CLI tool to run the app on the sample Markdown files in `testdata/`. The generated PDFs and intermediate HTML files are saved in the same directory. You can inspect these to understand how the app works and to debug any issues.
 
 Run `.scripts/smoketest.sh` to verify that the app runs successfully with valid arguments and that it fails with invalid arguments.
 
