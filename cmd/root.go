@@ -28,6 +28,7 @@ var (
 	saveHTML        bool
 	saveTranslation bool
 	listLanguages   bool
+	attribution     bool
 )
 
 var rootCmd = &cobra.Command{
@@ -50,6 +51,7 @@ func init() {
 	rootCmd.Flags().BoolVar(&saveHTML, "html", false, "also save the generated HTML")
 	rootCmd.Flags().BoolVar(&saveTranslation, "save-translation", false, "also save the translation markdown")
 	rootCmd.Flags().BoolVar(&listLanguages, "list-languages", false, "list supported language codes")
+	rootCmd.Flags().BoolVarP(&attribution, "attribution", "a", false, "append attribution line to output")
 }
 
 func Execute() {
@@ -95,6 +97,7 @@ func runPipeline(cmd *cobra.Command, args []string) error {
 		TargetLabel: languages.NativeName(targetLang),
 		Pairs:       pairs,
 		Fonts:       renderer.FontSizePresets[fontSize],
+		Attribution: attribution,
 	})
 	if err != nil {
 		return fmt.Errorf("rendering HTML: %w", err)

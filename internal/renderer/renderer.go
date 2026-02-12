@@ -36,6 +36,7 @@ type TemplateData struct {
 	TargetLabel string
 	Pairs       []BlockPair
 	Fonts       FontSizes
+	Attribution bool
 }
 
 // Render produces a complete HTML document with a 2-column table layout.

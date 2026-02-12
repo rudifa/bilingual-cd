@@ -64,6 +64,9 @@ bilingual_pdf --help
 bilingual_pdf document.md \
     --save-translation
 
+# Append attribution line to output
+bilingual_pdf document.md -a
+
 # List of supported language codes
 # (for --source and --target)
 bilingual_pdf --list-languages

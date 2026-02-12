@@ -334,6 +334,52 @@ func TestRender_Margins(t *testing.T) {
 	}
 }
 
+func TestRender_Attribution(t *testing.T) {
+	basePairs := []BlockPair{
+		{
+			Source: template.HTML("<p>Hello</p>"),
+			Target: template.HTML("<p>Bonjour</p>"),
+		},
+	}
+
+	t.Run("enabled", func(t *testing.T) {
+		data := TemplateData{
+			Title:       "Test",
+			SourceLabel: "EN",
+			TargetLabel: "FR",
+			Pairs:       basePairs,
+			Attribution: true,
+		}
+		html, err := Render(data)
+		if err != nil {
+			t.Fatalf("Render failed: %v", err)
+		}
+		if !strings.Contains(html, `class="attribution"`) {
+			t.Error("should contain attribution paragraph when enabled")
+		}
+		if !strings.Contains(html, `<a href="https://github.com/rudifa/bilingual_pdf">bilingual_pdf</a>`) {
+			t.Error("attribution should contain link to bilingual_pdf repo")
+		}
+	})
+
+	t.Run("disabled", func(t *testing.T) {
+		data := TemplateData{
+			Title:       "Test",
+			SourceLabel: "EN",
+			TargetLabel: "FR",
+			Pairs:       basePairs,
+			Attribution: false,
+		}
+		html, err := Render(data)
+		if err != nil {
+			t.Fatalf("Render failed: %v", err)
+		}
+		if strings.Contains(html, `class="attribution"`) {
+			t.Error("should not contain attribution when disabled")
+		}
+	})
+}
+
 func TestFontSizePresets_Values(t *testing.T) {
 	// Verify the preset map contains exactly the expected keys and values
 	expected := map[string]FontSizes{

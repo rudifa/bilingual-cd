@@ -90,6 +90,16 @@ const htmlTemplate = `<!DOCTYPE html>
       border-top: 1px solid #ddd;
       margin: 0.5em 0;
     }
+    .attribution {
+      text-align: center;
+      font-style: italic;
+      font-size: {{.Fonts.Pre}}pt;
+      margin-top: 1em;
+      color: #666;
+    }
+    .attribution a {
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -109,5 +119,8 @@ const htmlTemplate = `<!DOCTYPE html>
       {{end}}
     </tbody>
   </table>
+  {{if .Attribution}}
+  <p class="attribution">This document was created by <a href="https://github.com/rudifa/bilingual_pdf">bilingual_pdf</a></p>
+  {{end}}
 </body>
 </html>`
