@@ -8,7 +8,7 @@ const htmlTemplate = `<!DOCTYPE html>
   <style>
     @page {
       size: A4;
-      margin: 15mm;
+      margin: 0;
     }
     * {
       box-sizing: border-box;

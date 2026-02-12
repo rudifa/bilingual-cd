@@ -305,6 +305,35 @@ func TestRender_DefaultFontSize(t *testing.T) {
 	}
 }
 
+func TestRender_Margins(t *testing.T) {
+	data := TemplateData{
+		Title:       "Margin Check",
+		SourceLabel: "EN",
+		TargetLabel: "FR",
+		Pairs: []BlockPair{
+			{
+				Source: template.HTML("<p>Hello</p>"),
+				Target: template.HTML("<p>Bonjour</p>"),
+			},
+		},
+	}
+
+	html, err := Render(data)
+	if err != nil {
+		t.Fatalf("Render failed: %v", err)
+	}
+
+	// @page margin should be 0 (margins handled by body padding)
+	if !strings.Contains(html, "margin: 0;") {
+		t.Error("@page should have margin: 0")
+	}
+
+	// Body padding should be 15mm for left/right margins
+	if !strings.Contains(html, "padding: 15mm;") {
+		t.Error("body should have padding: 15mm")
+	}
+}
+
 func TestFontSizePresets_Values(t *testing.T) {
 	// Verify the preset map contains exactly the expected keys and values
 	expected := map[string]FontSizes{
