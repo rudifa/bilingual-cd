@@ -28,6 +28,7 @@ var (
 	saveHTML        bool
 	saveTranslation bool
 	listLanguages   bool
+	attribution     bool
 )
 
 var rootCmd = &cobra.Command{
@@ -50,6 +51,7 @@ func init() {
 	rootCmd.Flags().BoolVar(&saveHTML, "html", false, "also save the generated HTML")
 	rootCmd.Flags().BoolVar(&saveTranslation, "save-translation", false, "also save the translation markdown")
 	rootCmd.Flags().BoolVar(&listLanguages, "list-languages", false, "list supported language codes")
+	rootCmd.Flags().BoolVarP(&attribution, "attribution", "a", false, "append attribution line to output")
 }
 
 func Execute() {
@@ -95,6 +97,7 @@ func runPipeline(cmd *cobra.Command, args []string) error {
 		TargetLabel: languages.NativeName(targetLang),
 		Pairs:       pairs,
 		Fonts:       renderer.FontSizePresets[fontSize],
+		Attribution: attribution,
 	})
 	if err != nil {
 		return fmt.Errorf("rendering HTML: %w", err)
@@ -199,7 +202,7 @@ func translateWithGoogle(blocks []parser.Block) ([]parser.Block, error) {
 		case parser.BlockHTML:
 			// send raw HTML to Google Translate (it preserves tags)
 			texts[i] = b.Raw
-		case parser.BlockParagraph:
+		case parser.BlockParagraph, parser.BlockList:
 			// send raw markdown so inline syntax ([links](url), **bold**) is preserved
 			texts[i] = b.Raw
 		default:
@@ -342,21 +345,8 @@ func reconstructMarkdown(sourceBlock parser.Block, translatedText string) string
 	case parser.BlockThematicBreak:
 		return "---"
 	case parser.BlockList:
-		items := strings.Split(strings.TrimRight(translatedText, "\n"), "\n")
-		isOrdered := len(sourceBlock.Raw) > 0 && sourceBlock.Raw[0] >= '1' && sourceBlock.Raw[0] <= '9'
-		var buf strings.Builder
-		for i, item := range items {
-			item = strings.TrimSpace(item)
-			if item == "" {
-				continue
-			}
-			if isOrdered {
-				buf.WriteString(fmt.Sprintf("%d. %s\n", i+1, item))
-			} else {
-				buf.WriteString("- " + item + "\n")
-			}
-		}
-		return buf.String()
+		// translated text already contains list markers and inline markdown (links, etc.)
+		return translatedText
 	default:
 		return translatedText
 	}

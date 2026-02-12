@@ -305,6 +305,81 @@ func TestRender_DefaultFontSize(t *testing.T) {
 	}
 }
 
+func TestRender_Margins(t *testing.T) {
+	data := TemplateData{
+		Title:       "Margin Check",
+		SourceLabel: "EN",
+		TargetLabel: "FR",
+		Pairs: []BlockPair{
+			{
+				Source: template.HTML("<p>Hello</p>"),
+				Target: template.HTML("<p>Bonjour</p>"),
+			},
+		},
+	}
+
+	html, err := Render(data)
+	if err != nil {
+		t.Fatalf("Render failed: %v", err)
+	}
+
+	// @page margin should be 0 (margins handled by body padding)
+	if !strings.Contains(html, "margin: 0;") {
+		t.Error("@page should have margin: 0")
+	}
+
+	// Body padding should be 15mm for left/right margins
+	if !strings.Contains(html, "padding: 15mm;") {
+		t.Error("body should have padding: 15mm")
+	}
+}
+
+func TestRender_Attribution(t *testing.T) {
+	basePairs := []BlockPair{
+		{
+			Source: template.HTML("<p>Hello</p>"),
+			Target: template.HTML("<p>Bonjour</p>"),
+		},
+	}
+
+	t.Run("enabled", func(t *testing.T) {
+		data := TemplateData{
+			Title:       "Test",
+			SourceLabel: "EN",
+			TargetLabel: "FR",
+			Pairs:       basePairs,
+			Attribution: true,
+		}
+		html, err := Render(data)
+		if err != nil {
+			t.Fatalf("Render failed: %v", err)
+		}
+		if !strings.Contains(html, `class="attribution"`) {
+			t.Error("should contain attribution paragraph when enabled")
+		}
+		if !strings.Contains(html, `<a href="https://github.com/rudifa/bilingual_pdf">bilingual_pdf</a>`) {
+			t.Error("attribution should contain link to bilingual_pdf repo")
+		}
+	})
+
+	t.Run("disabled", func(t *testing.T) {
+		data := TemplateData{
+			Title:       "Test",
+			SourceLabel: "EN",
+			TargetLabel: "FR",
+			Pairs:       basePairs,
+			Attribution: false,
+		}
+		html, err := Render(data)
+		if err != nil {
+			t.Fatalf("Render failed: %v", err)
+		}
+		if strings.Contains(html, `class="attribution"`) {
+			t.Error("should not contain attribution when disabled")
+		}
+	})
+}
+
 func TestFontSizePresets_Values(t *testing.T) {
 	// Verify the preset map contains exactly the expected keys and values
 	expected := map[string]FontSizes{

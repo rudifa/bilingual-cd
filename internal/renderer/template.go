@@ -8,7 +8,7 @@ const htmlTemplate = `<!DOCTYPE html>
   <style>
     @page {
       size: A4;
-      margin: 15mm;
+      margin: 0;
     }
     * {
       box-sizing: border-box;
@@ -25,6 +25,9 @@ const htmlTemplate = `<!DOCTYPE html>
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
+    }
+    thead {
+      display: table-row-group;
     }
     thead td {
       background: #f0f0f0;
@@ -87,6 +90,16 @@ const htmlTemplate = `<!DOCTYPE html>
       border-top: 1px solid #ddd;
       margin: 0.5em 0;
     }
+    .attribution {
+      text-align: center;
+      font-style: italic;
+      font-size: {{.Fonts.Pre}}pt;
+      margin-top: 1em;
+      color: #666;
+    }
+    .attribution a {
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -106,5 +119,8 @@ const htmlTemplate = `<!DOCTYPE html>
       {{end}}
     </tbody>
   </table>
+  {{if .Attribution}}
+  <p class="attribution">This document was created by <a href="https://github.com/rudifa/bilingual_pdf">bilingual_pdf</a></p>
+  {{end}}
 </body>
 </html>`

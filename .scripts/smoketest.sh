@@ -97,7 +97,7 @@ run_expect_ok "--list-languages" --list-languages
 run_expect_ok "with --translation file (no network)" \
     testdata/sample.fr.md --translation testdata/sample.es.md
 run_expect_ok "small fr->es" testdata/sample.fr.md --translation testdata/sample.es.md --font-size small --output testdata/sample.fr.es.s.pdf
-run_expect_ok "medium fr->es" testdata/sample.fr.md --translation testdata/sample.es.md --font-size medium --output testdata/sample.fr.es.m.pdf
+run_expect_ok "medium fr->es -a" testdata/sample.fr.md --translation testdata/sample.es.md --font-size medium --output testdata/sample.fr.es.m.pdf --attribution
 run_expect_ok "large fr->es" testdata/sample.fr.md --translation testdata/sample.es.md --font-size large --output testdata/sample.fr.es.l.pdf
 
 echo ""

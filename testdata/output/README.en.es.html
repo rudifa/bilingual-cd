@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Bilingual: English → Spanish</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 0;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 10pt;
+      line-height: 1.4;
+      margin: 0;
+      padding: 15mm;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    thead {
+      display: table-row-group;
+    }
+    thead td {
+      background: #f0f0f0;
+      font-weight: bold;
+      text-align: center;
+      padding: 8px 12px;
+      border-bottom: 2px solid #ccc;
+      font-size: 11pt;
+    }
+    tbody tr {
+      page-break-inside: avoid;
+    }
+    td {
+      width: 50%;
+      padding: 6px 12px;
+      vertical-align: top;
+      border-bottom: 1px solid #eee;
+    }
+    td:first-child {
+      border-right: 1px solid #ddd;
+    }
+    td h1, td h2, td h3, td h4, td h5, td h6 {
+      margin-top: 0.3em;
+      margin-bottom: 0.2em;
+    }
+    td p {
+      margin-top: 0.2em;
+      margin-bottom: 0.2em;
+    }
+    td ul, td ol {
+      margin-top: 0.2em;
+      margin-bottom: 0.2em;
+      padding-left: 1.5em;
+    }
+    code {
+      background: #f8f8f8;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 9pt;
+    }
+    pre {
+      background: #f8f8f8;
+      padding: 8px;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 8pt;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+    }
+    blockquote {
+      border-left: 3px solid #ddd;
+      margin: 0.3em 0;
+      padding: 0.2em 0 0.2em 1em;
+      color: #666;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #ddd;
+      margin: 0.5em 0;
+    }
+    .attribution {
+      text-align: center;
+      font-style: italic;
+      font-size: 8pt;
+      margin-top: 1em;
+      color: #666;
+    }
+    .attribution a {
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <thead>
+      <tr>
+        <td>English</td>
+        <td>Español</td>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td><h1>Bilingual 2-Column PDF Generator</h1>
+</td>
+        <td><h1>Generador de PDF bilingüe de 2 columnas</h1>
+</td>
+      </tr>
+      
+      <tr>
+        <td><p>Converts a Markdown document into a side-by-side bilingual PDF with the source language in the left column and its translation in the right column. Supports any language pair available through Google Translate. Defaults to French→Spanish. Corresponding paragraphs are vertically aligned.</p>
+</td>
+        <td><p>Convierte un documento Markdown en un PDF bilingüe uno al lado del otro con el idioma de origen en la columna de la izquierda y su traducción en la columna de la derecha. Admite cualquier par de idiomas disponible a través de Google Translate. El valor predeterminado es francés → español. Los párrafos correspondientes están alineados verticalmente.</p>
+</td>
+      </tr>
+      
+      <tr>
+        <td><h2>Quick start</h2>
+</td>
+        <td><h2>Inicio rápido</h2>
+</td>
+      </tr>
+      
+      <tr>
+        <td><pre><code class="language-bash"># French → Spanish (default)
+bilingual_pdf my_doc.md
+
+# Spanish → French
+bilingual_pdf mi_doc.md \
+    --source es --target fr
+
+# English → German
+bilingual_pdf my_doc.md \
+    --source en --target de
+</code></pre>
+</td>
+        <td><pre><code class="language-bash"># French → Spanish (default)
+bilingual_pdf my_doc.md
+
+# Spanish → French
+bilingual_pdf mi_doc.md \
+    --source es --target fr
+
+# English → German
+bilingual_pdf my_doc.md \
+    --source en --target de
+</code></pre>
+</td>
+      </tr>
+      
+      <tr>
+        <td><h2>Installation</h2>
+</td>
+        <td><h2>Instalación</h2>
+</td>
+      </tr>
+      
+      <tr>
+        <td><ol>
+<li>download the zip file appropriate for your platform from the <a href="https://github.com/rudifa/bilingual_pdf/releases/latest">Releases</a> page</li>
+<li>unzip and move the <code>bilingual_pdf</code> executable into a directory which is on your system PATH</li>
+<li>if needed, handle the security settings for the executable <code>bilingual_pdf</code></li>
+</ol>
+</td>
+        <td><ol>
+<li>descargue el archivo zip apropiado para su plataforma desde la página <a href="https://github.com/rudifa/bilingual_pdf/releases/latest">Versiones</a></li>
+<li>descomprima y mueva el ejecutable <code>bililingual_pdf</code> a un directorio que esté en la RUTA de su sistema</li>
+<li>si es necesario, maneje la configuración de seguridad para el ejecutable <code>bilingüe_pdf</code></li>
+</ol>
+</td>
+      </tr>
+      
+      <tr>
+        <td><p>On a Mac computer, you can allow running the app by removing the quarantine attribute:</p>
+</td>
+        <td><p>En una computadora Mac, puedes permitir la ejecución de la aplicación eliminando el atributo de cuarentena:</p>
+</td>
+      </tr>
+      
+      <tr>
+        <td><pre><code class="language-bash">xattr -d com.apple.quarantine \
+    /path/to/bilingual_pdf
+</code></pre>
+</td>
+        <td><pre><code class="language-bash">xattr -d com.apple.quarantine \
+    /path/to/bilingual_pdf
+</code></pre>
+</td>
+      </tr>
+      
+      <tr>
+        <td><h2>Usage</h2>
+</td>
+        <td><h2>Uso</h2>
+</td>
+      </tr>
+      
+      <tr>
+        <td><pre><code class="language-bash"># French → Spanish (default)
+bilingual_pdf document.md
+
+# Any language pair
+bilingual_pdf document.md \
+    --source en --target de
+
+# Use a pre-translated markdown file
+bilingual_pdf document.md \
+    --translation document_es.md
+
+# Specify output filename
+bilingual_pdf document.md \
+    -o bilingual.pdf
+
+# Choose font size:
+# small, medium (default), or large
+bilingual_pdf document.md \
+    --font-size small
+
+# Also save the intermediate HTML
+# (useful for debugging)
+bilingual_pdf document.md --html
+
+# Get full help
+bilingual_pdf --help
+
+# Also save the translation markdown
+bilingual_pdf document.md \
+    --save-translation
+
+# Append attribution line to output
+bilingual_pdf document.md -a
+
+# List of supported language codes
+# (for --source and --target)
+bilingual_pdf --list-languages
+
+</code></pre>
+</td>
+        <td><pre><code class="language-bash"># French → Spanish (default)
+bilingual_pdf document.md
+
+# Any language pair
+bilingual_pdf document.md \
+    --source en --target de
+
+# Use a pre-translated markdown file
+bilingual_pdf document.md \
+    --translation document_es.md
+
+# Specify output filename
+bilingual_pdf document.md \
+    -o bilingual.pdf
+
+# Choose font size:
+# small, medium (default), or large
+bilingual_pdf document.md \
+    --font-size small
+
+# Also save the intermediate HTML
+# (useful for debugging)
+bilingual_pdf document.md --html
+
+# Get full help
+bilingual_pdf --help
+
+# Also save the translation markdown
+bilingual_pdf document.md \
+    --save-translation
+
+# Append attribution line to output
+bilingual_pdf document.md -a
+
+# List of supported language codes
+# (for --source and --target)
+bilingual_pdf --list-languages
+
+</code></pre>
+</td>
+      </tr>
+      
+      <tr>
+        <td><p><strong>Default output filename:</strong> <code>&lt;stem&gt;.&lt;source&gt;.&lt;target&gt;.pdf</code> (or <code>.html</code> with <code>--html</code>). If the input already ends with <code>.&lt;source&gt;.md</code>, the source suffix is not repeated (e.g. <code>doc.fr.md</code> → <code>doc.fr.es.pdf</code>, not <code>doc.fr.fr.es.pdf</code>).</p>
+</td>
+        <td><p><strong>Nombre de archivo de salida predeterminado:</strong> <code>&lt;fuente&gt;.&lt;fuente&gt;.&lt;destino&gt;.pdf</code> (o <code>.html</code> con <code>--html</code>). Si la entrada ya termina en <code>.&lt;fuente&gt;.md</code>, el sufijo fuente no se repite (por ejemplo, <code>doc.fr.md</code> → <code>doc.fr.es.pdf</code>, no <code>doc.fr.fr.es.pdf</code>).</p>
+</td>
+      </tr>
+      
+      <tr>
+        <td><h2>Input format</h2>
+</td>
+        <td><h2>Formato de entrada</h2>
+</td>
+      </tr>
+      
+      <tr>
+        <td><p>The input Markdown should contain simple text, optionally formatted with headings, paragraphs, lists, code blocks, blockquotes, horizontal rules and web links. For example:</p>
+</td>
+        <td><p>El Markdown de entrada debe contener texto simple, opcionalmente formateado con encabezados, párrafos, listas, bloques de código, citas en bloque, reglas horizontales y enlaces web. Por ejemplo:</p>
+</td>
+      </tr>
+      
+      <tr>
+        <td><pre><code class="language-markdown"># Main Title
+
+## Section
+
+A paragraph of text. Multiple lines
+in the source are joined into a single
+paragraph.
+
+Another paragraph, separated by a blank line.
+
+A web link:
+[OpenAI](https://www.openai.com)
+</code></pre>
+</td>
+        <td><pre><code class="language-markdown"># Main Title
+
+## Section
+
+A paragraph of text. Multiple lines
+in the source are joined into a single
+paragraph.
+
+Another paragraph, separated by a blank line.
+
+A web link:
+[OpenAI](https://www.openai.com)
+</code></pre>
+</td>
+      </tr>
+      
+      <tr>
+        <td><p>The app does not support more complex Markdown features, notably tables and images.</p>
+</td>
+        <td><p>La aplicación no admite funciones de Markdown más complejas, en particular tablas e imágenes.</p>
+</td>
+      </tr>
+      
+      <tr>
+        <td><h2>Using a pre-translated file</h2>
+</td>
+        <td><h2>Usando un archivo pretraducido</h2>
+</td>
+      </tr>
+      
+      <tr>
+        <td><p>If you prefer hand-edited translations over machine translation, provide a pre-translated Markdown file with the <strong>same structure</strong> (same number and order of headings and paragraphs) as the source:</p>
+</td>
+        <td><p>Si prefiere las traducciones editadas a mano en lugar de la traducción automática, proporcione un archivo Markdown pretraducido con la <strong>misma estructura</strong> (mismo número y orden de títulos y párrafos) que la fuente:</p>
+</td>
+      </tr>
+      
+      <tr>
+        <td><pre><code class="language-bash">bilingual_pdf source_fr.md \
+    --translation source_es.md
+</code></pre>
+</td>
+        <td><pre><code class="language-bash">bilingual_pdf source_fr.md \
+    --translation source_es.md
+</code></pre>
+</td>
+      </tr>
+      
+      <tr>
+        <td><p>The app warns if the block counts don't match and pads the shorter side with empty cells.</p>
+</td>
+        <td><p>La aplicación advierte si el recuento de bloques no coincide y rellena el lado más corto con celdas vacías.</p>
+</td>
+      </tr>
+      
+      <tr>
+        <td><h2>For developers only</h2>
+</td>
+        <td><h2>Sólo para desarrolladores</h2>
+</td>
+      </tr>
+      
+      <tr>
+        <td><h3>How it works</h3>
+</td>
+        <td><h3>Como funciona</h3>
+</td>
+      </tr>
+      
+      <tr>
+        <td><ol>
+<li><strong>Parse</strong> the input Markdown into structural blocks (headings and paragraphs)</li>
+<li><strong>Translate</strong> each block to the target language (automatically via Google Translate, or using a pre-translated file you supply)</li>
+<li><strong>Render</strong> a 2-column HTML table where each row pairs a source block with its translated counterpart</li>
+<li><strong>Convert</strong> the HTML to an A4 PDF</li>
+</ol>
+</td>
+        <td><ol>
+<li><strong>Analizar</strong> el Markdown de entrada en bloques estructurales (títulos y párrafos)</li>
+<li><strong>Traduce</strong> cada bloque al idioma de destino (automáticamente a través del Traductor de Google o utilizando un archivo pretraducido que usted proporcione)</li>
+<li><strong>Renderizar</strong> una tabla HTML de 2 columnas donde cada fila empareja un bloque fuente con su contraparte traducida.</li>
+<li><strong>Convierta</strong> el HTML a un PDF A4</li>
+</ol>
+</td>
+      </tr>
+      
+      <tr>
+        <td><h3>Build, test and deploy</h3>
+</td>
+        <td><h3>Construya, pruebe e implemente</h3>
+</td>
+      </tr>
+      
+      <tr>
+        <td><p>Use the go build, test and install commands or use the <code>Makefile</code> targets.</p>
+</td>
+        <td><p>Utilice los comandos go build, test and install o utilice los objetivos <code>Makefile</code>.</p>
+</td>
+      </tr>
+      
+      <tr>
+        <td><p>Use the resulting <code>bilingual_pdf</code> CLI tool to run the app on the sample Markdown files in <code>testdata/</code>. The generated PDFs and intermediate HTML files are saved in the same directory. You can inspect these to understand how the app works and to debug any issues.</p>
+</td>
+        <td><p>Utilice la herramienta CLI <code>bililingual_pdf</code> resultante para ejecutar la aplicación en los archivos Markdown de muestra en <code>testdata/</code>. Los archivos PDF generados y los archivos HTML intermedios se guardan en el mismo directorio. Puede inspeccionarlos para comprender cómo funciona la aplicación y solucionar cualquier problema.</p>
+</td>
+      </tr>
+      
+      <tr>
+        <td><p>Run <code>.scripts/smoketest.sh</code> to verify that the app runs successfully with valid arguments and that it fails with invalid arguments.</p>
+</td>
+        <td><p>Ejecute <code>.scripts/smoketest.sh</code> para verificar que la aplicación se ejecute correctamente con argumentos válidos y que falle con argumentos no válidos.</p>
+</td>
+      </tr>
+      
+      <tr>
+        <td><pre><code class="language-bash"># quick tests without network access
+./.scripts/smoketest.sh
+
+# include tests using the translation API
+./.scripts/smoketest.sh --full
+
+# keep generated files for inspection
+./.scripts/smoketest.sh --full --keep
+
+# remove generated files
+./.scripts/smoketest.sh --clean
+</code></pre>
+</td>
+        <td><pre><code class="language-bash"># quick tests without network access
+./.scripts/smoketest.sh
+
+# include tests using the translation API
+./.scripts/smoketest.sh --full
+
+# keep generated files for inspection
+./.scripts/smoketest.sh --full --keep
+
+# remove generated files
+./.scripts/smoketest.sh --clean
+</code></pre>
+</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  
+  <p class="attribution">This document was created by <a href="https://github.com/rudifa/bilingual_pdf">bilingual_pdf</a></p>
+  
+</body>
+</html>
