@@ -19,6 +19,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Version is set at build time via -ldflags.
+var Version = "dev"
+
 var (
 	sourceLang      string
 	targetLang      string
@@ -43,6 +46,7 @@ Google Translate. Defaults to French → Spanish.`,
 }
 
 func init() {
+	rootCmd.Version = Version
 	rootCmd.Flags().StringVarP(&sourceLang, "source", "s", "fr", "source language code")
 	rootCmd.Flags().StringVarP(&targetLang, "target", "t", "es", "target language code")
 	rootCmd.Flags().StringVar(&translationFile, "translation", "", "path to pre-translated markdown file")
